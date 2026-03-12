@@ -1,6 +1,6 @@
 import cron from 'node-cron';
 import { storage } from './supabase-storage';
-import { sendTelegramNotification } from './telegram-bot';
+// import { sendTelegramNotification } from './telegram-bot'; // DISABLED: Telegram temporarily disabled
 import { notificationService } from './notification-service'; // Assuming notificationService is imported from here
 
 // Run every 6 hours to remind users about unclaimed points

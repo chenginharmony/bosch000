@@ -223,7 +223,7 @@ export function createAdminRouter(storage: Storage) {
 
       let successCount = 0;
       let failCount = 0;
-      const { sendTelegramNotification } = await import('../telegram-bot');
+      // const { sendTelegramNotification } = await import('../telegram-bot'); // DISABLED: Telegram temporarily disabled
       const { emitNotificationToUser, broadcastNotificationToAll } = await import('../socket-server');
 
       if (sendToAll) {
@@ -249,19 +249,20 @@ export function createAdminRouter(storage: Storage) {
             emitNotificationToUser(creator.address || creator.id, notification);
 
             // Send Telegram notification if enabled
-            if (includeTelegram && creator.address) {
-              try {
-                await sendTelegramNotification(
-                  creator.address,
-                  title,
-                  message,
-                  type
-                );
-              } catch (telegramError) {
-                console.warn(`[ADMIN] Telegram failed for ${creator.address}:`, telegramError);
-                // Don't fail the whole operation if Telegram fails
-              }
-            }
+            // DISABLED: Telegram temporarily disabled
+            // if (includeTelegram && creator.address) {
+            //   try {
+            //     await sendTelegramNotification(
+            //       creator.address,
+            //       title,
+            //       message,
+            //       type
+            //     );
+            //   } catch (telegramError) {
+            //     console.warn(`[ADMIN] Telegram failed for ${creator.address}:`, telegramError);
+            //     // Don't fail the whole operation if Telegram fails
+            //   }
+            // }
 
             successCount++;
           } catch (error) {
@@ -304,18 +305,19 @@ export function createAdminRouter(storage: Storage) {
             emitNotificationToUser(targetUserId, notification);
 
             // Send Telegram notification if enabled
-            if (includeTelegram && (creator?.address || targetUserId)) {
-              try {
-                await sendTelegramNotification(
-                  creator?.address || targetUserId,
-                  title,
-                  message,
-                  type
-                );
-              } catch (telegramError) {
-                console.warn(`[ADMIN] Telegram failed for ${targetUserId}:`, telegramError);
-              }
-            }
+            // DISABLED: Telegram temporarily disabled
+            // if (includeTelegram && (creator?.address || targetUserId)) {
+            //   try {
+            //     await sendTelegramNotification(
+            //       creator?.address || targetUserId,
+            //       title,
+            //       message,
+            //       type
+            //     );
+            //   } catch (telegramError) {
+            //     console.warn(`[ADMIN] Telegram failed for ${targetUserId}:`, telegramError);
+            //   }
+            // }
 
             successCount++;
           } catch (error) {

@@ -22,7 +22,7 @@ import axios from "axios";
 import { detectPlatform } from "./platform-detector";
 import { scrapeByPlatform } from "./platform-scrapers";
 import { migrateOldData } from "./migrate-old-data";
-import { sendTelegramNotification } from "./telegram-bot";
+// import { sendTelegramNotification } from "./telegram-bot"; // DISABLED: Telegram temporarily disabled
 import { RegistryService } from "./registry-service";
 import { ActivityTrackerService } from "./activity-tracker-service";
 import { base } from "viem/chains";
@@ -234,12 +234,12 @@ export async function syncCreatorProfile(privyId: string, address: string | null
     // Send Telegram notification if address available
     if (address) {
       try {
-        await sendTelegramNotification(
-          address,
-          '🎁 Welcome to Every1.fun!',
-          `Welcome! You've earned ${welcomePoints} E1XP points to get started. Come back daily to earn more points and build your streak! 🔥`,
-          'reward'
-        );
+        // await sendTelegramNotification(
+        //   address,
+        //   '🎁 Welcome to Every1.fun!',
+        //   `Welcome! You've earned ${welcomePoints} E1XP points to get started. Come back daily to earn more points and build your streak! 🔥`,
+        //   'reward'
+        // ); // DISABLED
       } catch (telegramError) {
         console.warn('[syncCreatorProfile] Failed to send Telegram welcome notification:', telegramError);
       }

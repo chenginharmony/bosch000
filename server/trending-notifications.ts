@@ -1,7 +1,7 @@
 import { storage } from "./storage";
 import { getCoin } from "@zoralabs/coins-sdk";
 import { base } from "viem/chains";
-import { sendTelegramNotification } from "./telegram-bot";
+// import { sendTelegramNotification } from "./telegram-bot"; // DISABLED: Telegram temporarily disabled
 
 // Assuming TRENDING_CHECK_INTERVAL is defined elsewhere, e.g., in a config file or constants.
 // For this example, let's define it here.

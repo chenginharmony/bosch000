@@ -1,5 +1,5 @@
 import { storage } from './supabase-storage';
-import { sendTelegramNotification } from './telegram-bot';
+// import { sendTelegramNotification } from './telegram-bot'; // DISABLED: Telegram temporarily disabled
 import type { Reward, Creator, Coin } from '@shared/schema';
 
 // Randomized earnings notification messages
@@ -72,7 +72,7 @@ export class NotificationService {
       createdAt: new Date(),
     });
 
-    await sendTelegramNotification(userAddress, title, message, 'streak');
+    // await sendTelegramNotification(userAddress, title, message, 'streak'); // DISABLED
   }
 
   // Send E1XP claim reminder
@@ -89,7 +89,7 @@ export class NotificationService {
       createdAt: new Date(),
     });
 
-    await sendTelegramNotification(userAddress, title, message, 'reminder');
+    // await sendTelegramNotification(userAddress, title, message, 'reminder'); // DISABLED
   }
 
   // Send referral notification to referrer
@@ -106,7 +106,7 @@ export class NotificationService {
       createdAt: new Date(),
     });
 
-    await sendTelegramNotification(referrerAddress, title, message, 'referral');
+    // await sendTelegramNotification(referrerAddress, title, message, 'referral'); // DISABLED
   }
 
   // Send new trade notification
@@ -130,7 +130,7 @@ export class NotificationService {
       createdAt: new Date(),
     });
 
-    await sendTelegramNotification(userAddress, title, message, 'trade');
+    // await sendTelegramNotification(userAddress, title, message, 'trade'); // DISABLED
   }
 
   // Send E1XP points earned notification
@@ -147,7 +147,7 @@ export class NotificationService {
       createdAt: new Date(),
     });
 
-    await sendTelegramNotification(userAddress, title, message, 'points');
+    // await sendTelegramNotification(userAddress, title, message, 'points'); // DISABLED
   }
 
   // Send welcome bonus notification for new users
@@ -164,7 +164,7 @@ export class NotificationService {
       createdAt: new Date(),
     });
 
-    await sendTelegramNotification(userAddress, title, message, 'reward');
+    // await sendTelegramNotification(userAddress, title, message, 'reward'); // DISABLED
   }
 
   // Send new creators to follow notification
@@ -180,7 +180,7 @@ export class NotificationService {
       message,
     });
 
-    await sendTelegramNotification(userAddress, title, message, 'creator_suggestion');
+    // await sendTelegramNotification(userAddress, title, message, 'creator_suggestion'); // DISABLED
   }
 
   // Send new follower notification
@@ -195,7 +195,7 @@ export class NotificationService {
       message,
     });
 
-    await sendTelegramNotification(creatorAddress, title, message, 'follower');
+    // await sendTelegramNotification(creatorAddress, title, message, 'follower'); // DISABLED
   }
 
   // Send new coin notification
@@ -212,7 +212,7 @@ export class NotificationService {
       coinSymbol: coin.symbol,
     });
 
-    await sendTelegramNotification(userAddress, title, message, 'coin_created');
+    // await sendTelegramNotification(userAddress, title, message, 'coin_created'); // DISABLED
   }
 
   // Send coin created success notification to creator
@@ -229,7 +229,7 @@ export class NotificationService {
       coinSymbol: coin.symbol,
     });
 
-    await sendTelegramNotification(creatorAddress, title, message, 'coin_created');
+    // await sendTelegramNotification(creatorAddress, title, message, 'coin_created'); // DISABLED
   }
 
   // Send milestone notification
@@ -249,7 +249,7 @@ export class NotificationService {
       amount: reward?.toString(),
     });
 
-    await sendTelegramNotification(userAddress, title, message, 'milestone');
+    // await sendTelegramNotification(userAddress, title, message, 'milestone'); // DISABLED
   }
 
   // Get top creators by total volume
@@ -341,12 +341,12 @@ export class NotificationService {
     });
 
     // Send to Telegram
-    await sendTelegramNotification(
-      userAddress,
-      title,
-      message,
-      'reward'
-    );
+    // await sendTelegramNotification(
+    //   userAddress,
+    //   title,
+    //   message,
+    //   'reward'
+    // ); // DISABLED
   }
 
   // Notify about top traders

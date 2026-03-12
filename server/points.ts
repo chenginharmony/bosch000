@@ -2,7 +2,7 @@ import { db } from "./db";
 import { users, pointsTransactions, referrals } from "@shared/schema";
 import { eq } from "drizzle-orm";
 import { storage } from './supabase-storage';
-import { sendTelegramNotification } from './telegram-bot';
+// import { sendTelegramNotification } from './telegram-bot'; // DISABLED: Telegram temporarily disabled
 import { notificationService } from './notification-service';
 import type { Reward, Creator, Coin } from '@shared/schema';
 

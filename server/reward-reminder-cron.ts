@@ -1,5 +1,5 @@
 import { storage } from './supabase-storage';
-import { sendTelegramNotification } from './telegram-bot';
+// import { sendTelegramNotification } from './telegram-bot'; // DISABLED: Telegram temporarily disabled
 
 /**
  * Send reminders for unclaimed E1XP rewards
