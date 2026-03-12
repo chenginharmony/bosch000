@@ -9,6 +9,7 @@ let botInstance: any = null; // Added for singleton check
 const userWallets = new Map<number, string>();
 let isPolling = false;
 let initializationPromise: Promise<void> | null = null;
+let hasAuthFailed = false; // Track if bot auth has permanently failed
 
 // Helper function to format wallet address for display
 function formatAddress(address: string): string {
@@ -263,6 +264,12 @@ export async function initTelegramBot() {
     return;
   }
 
+  // Don't retry if authentication has permanently failed
+  if (hasAuthFailed) {
+    console.warn('⚠️ Telegram bot authentication previously failed, skipping initialization');
+    return;
+  }
+
   // Prevent multiple bot instances
   if (botInstance && isPolling) {
     console.log("⚠️ Telegram bot already initialized and polling, skipping...");
@@ -305,8 +312,23 @@ export async function initTelegramBot() {
 
       // Add polling error handler BEFORE starting polling
       bot.on('polling_error', (error) => {
+        // Handle 401 Unauthorized - token is invalid/expired
+        if (error.message.includes('401') || error.message.includes('Unauthorized')) {
+          if (!hasAuthFailed) {
+            hasAuthFailed = true;
+            console.error('❌ Telegram bot authentication failed (401 Unauthorized). Token may be invalid or expired.');
+            console.error('   Please update TELEGRAM_BOT_TOKEN environment variable with a valid token.');
+            isPolling = false;
+            if (bot) {
+              bot.stopPolling({ cancel: true }).catch(() => {});
+              bot.removeAllListeners();
+              bot = null;
+              botInstance = null;
+            }
+          }
+        }
         // Silently handle 409 conflicts - don't log repeatedly
-        if (error.message.includes('409 Conflict')) {
+        else if (error.message.includes('409 Conflict')) {
           if (!global.isShuttingDown && isPolling) {
             console.log('⚠️ Detected multiple bot instances, stopping this one...');
             isPolling = false;
@@ -327,9 +349,15 @@ export async function initTelegramBot() {
         await bot.startPolling();
         isPolling = true;
         botInstance = bot;
-        console.log('Telegram bot polling started successfully');
-      } catch (error) {
-        console.error('Failed to start Telegram bot polling:', error);
+        console.log('✅ Telegram bot polling started successfully');
+      } catch (error: any) {
+        if (error.message?.includes('401') || error.message?.includes('Unauthorized')) {
+          hasAuthFailed = true;
+          console.error('❌ Telegram bot authentication failed (401 Unauthorized). Token may be invalid or expired.');
+          console.error('   Please update TELEGRAM_BOT_TOKEN environment variable with a valid token.');
+        } else {
+          console.error('Failed to start Telegram bot polling:', error);
+        }
         isPolling = false;
         bot = null;
         botInstance = null;
@@ -341,6 +369,12 @@ export async function initTelegramBot() {
   })();
 
   await initializationPromise;
+
+  // Only set up message handlers if bot successfully initialized
+  if (!bot || !isPolling || hasAuthFailed) {
+    console.warn('⚠️ Telegram bot not properly initialized, skipping message handlers setup');
+    return;
+  }
 
   bot.onText(/\/start/, (msg) => {
     const chatId = msg.chat.id;
@@ -431,8 +465,12 @@ export async function sendTelegramNotification(
   coinData?: any,
   stats?: any
 ) {
-  if (!bot) {
-    console.warn('Bot not initialized, cannot send notification.');
+  if (!bot || hasAuthFailed) {
+    if (hasAuthFailed) {
+      console.debug('Telegram bot authentication failed, skipping notification');
+    } else {
+      console.debug('Bot not initialized, cannot send notification.');
+    }
     return;
   }
 
@@ -611,6 +649,12 @@ export async function broadcastExistingCoins(coins: any[]) {
   } catch (error) {
     console.error('Failed to broadcast to channel:', error);
   }
+}
+
+// Function to reset auth failure state (for testing or token refresh)
+export function resetTelegramAuthFailure() {
+  hasAuthFailed = false;
+  console.log('✅ Telegram auth failure state reset. Bot will attempt initialization on next call.');
 }
 
 export async function stopTelegramBot() {
