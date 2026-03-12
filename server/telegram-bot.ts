@@ -345,24 +345,12 @@ export async function initTelegramBot() {
       });
 
       // Start polling manually to track state
-      try {
-        await bot.startPolling();
-        isPolling = true;
-        botInstance = bot;
-        console.log('✅ Telegram bot polling started successfully');
-      } catch (error: any) {
-        if (error.message?.includes('401') || error.message?.includes('Unauthorized')) {
-          hasAuthFailed = true;
-          console.error('❌ Telegram bot authentication failed (401 Unauthorized). Token may be invalid or expired.');
-          console.error('   Please update TELEGRAM_BOT_TOKEN environment variable with a valid token.');
-        } else {
-          console.error('Failed to start Telegram bot polling:', error);
-        }
-        isPolling = false;
-        bot = null;
-        botInstance = null;
-        throw error; // Re-throw to handle in outer try-catch
-      }
+      // DISABLED: Telegram polling temporarily disabled
+      console.log('ℹ️  Telegram bot polling is currently disabled');
+      isPolling = false;
+      bot = null;
+      botInstance = null;
+      return;
     } finally {
       initializationPromise = null;
     }
@@ -372,7 +360,7 @@ export async function initTelegramBot() {
 
   // Only set up message handlers if bot successfully initialized
   if (!bot || !isPolling || hasAuthFailed) {
-    console.warn('⚠️ Telegram bot not properly initialized, skipping message handlers setup');
+    console.debug('Telegram bot not initialized, skipping message handlers setup');
     return;
   }
 
