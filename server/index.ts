@@ -106,18 +106,20 @@ app.use((req, res, next) => {
   setSocketIO(io);
 
   // Initialize Telegram bot (only once)
-  if (!global.telegramBotInitialized && !global.isShuttingDown) {
-    try {
-      await initTelegramBot();
-      global.telegramBotInitialized = true;
-      console.log('✅ Telegram bot initialized and marked as global');
-    } catch (error) {
-      console.error('Failed to initialize Telegram bot:', error);
-      global.telegramBotInitialized = false;
-    }
-  } else if (global.telegramBotInitialized) {
-    console.log('ℹ️  Telegram bot already initialized globally, skipping...');
-  }
+  // DISABLED: Telegram polling temporarily disabled until token is updated
+  // if (!global.telegramBotInitialized && !global.isShuttingDown) {
+  //   try {
+  //     await initTelegramBot();
+  //     global.telegramBotInitialized = true;
+  //     console.log('✅ Telegram bot initialized and marked as global');
+  //   } catch (error) {
+  //     console.error('Failed to initialize Telegram bot:', error);
+  //     global.telegramBotInitialized = false;
+  //   }
+  // } else if (global.telegramBotInitialized) {
+  //   console.log('ℹ️  Telegram bot already initialized globally, skipping...');
+  // }
+  console.log('ℹ️  Telegram bot polling is currently disabled');
 
   // Start trending notifications
   const { startTrendingNotifications } = await import('./trending-notifications');
